@@ -1,0 +1,3 @@
+[submodule "js-spec"]
+	path = js-spec
+	url = git@github.com:TodoBackend/todo-backend-js-spec.git
