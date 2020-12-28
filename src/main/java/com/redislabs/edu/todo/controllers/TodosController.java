@@ -1,10 +1,17 @@
 package com.redislabs.edu.todo.controllers;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.redislabs.edu.todo.domain.Todo;
 import com.redislabs.edu.todo.repository.TodoRepository;
 
+@CrossOrigin( //
+    methods = { POST, GET, OPTIONS, DELETE, PATCH }, //
+    maxAge = 3600, //
+    allowedHeaders = { //
+        "x-requested-with", "origin", "content-type", "accept", "accept-patch" //
+    }, //
+    origins = "*" //
+)
 @RestController
 @RequestMapping("/todos")
 public class TodosController {
