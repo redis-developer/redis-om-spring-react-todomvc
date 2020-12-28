@@ -13,8 +13,12 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
 import com.redislabs.edu.todo.domain.Todo;
 import com.redislabs.edu.todo.repository.TodoRepository;
@@ -39,8 +43,14 @@ public class TodosController {
     List<Todo> todos = StreamSupport //
         .stream(repository.findAll().spliterator(), false) //
         .collect(Collectors.toList());
-    
+
     return todos;
+  }
+
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public Todo create(@RequestBody Todo todo) {
+    return repository.save(todo);
   }
 
 }
