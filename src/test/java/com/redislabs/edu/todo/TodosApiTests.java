@@ -1,6 +1,7 @@
 package com.redislabs.edu.todo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -13,11 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 
 import com.redislabs.edu.todo.domain.Todo;
 import com.redislabs.edu.todo.repository.TodoRepository;
@@ -59,5 +63,19 @@ public class TodosApiTests {
         .andExpect(jsonPath("$[0].title", is(todo1.getTitle()))) //
         .andExpect(jsonPath("$[1].title", is(todo2.getTitle()))) //
         .andExpect(jsonPath("$[2].title", is(todo3.getTitle())));
+  }
+
+  @Test
+  public void testGivenAJSONPayloadItShouldSaveATodo() throws Exception {
+    Todo todo = Todo.builder().title("Grab your hat").build();
+
+    given(todoRepository.save(any(Todo.class))).willReturn(todo);
+
+    mvc.perform(post("/todos") //
+        .contentType(MediaType.APPLICATION_JSON) //
+        .content("{ \"title\": \"Grab your hat\" }".getBytes()) //
+        .characterEncoding("utf-8")) //
+        .andExpect(status().is(HttpStatus.CREATED.value())) //
+        .andExpect(jsonPath("$.title", is("Grab your hat")));
   }
 }
