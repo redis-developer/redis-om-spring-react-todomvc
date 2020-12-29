@@ -3,6 +3,7 @@ package com.redislabs.edu.todo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -113,5 +114,22 @@ public class TodosApiTests {
         .characterEncoding("utf-8")) //
         .andExpect(status().is(HttpStatus.CREATED.value())) //
         .andExpect(jsonPath("$.url", is(String.format("http://localhost/todos/%s", todo.getId()))));
+  }
+  
+  @Test
+  public void testUpdateATodo() throws Exception {
+    Todo todo = Todo.builder().id(4000L).title("Read a book").build();
+
+    given(todoRepository.findById(todo.getId())).willReturn(Optional.of(todo));
+    given(todoRepository.save(any(Todo.class))).willReturn(todo);
+
+    mvc.perform(patch(String.format("/todos/%s", todo.getId())) //
+        .contentType(MediaType.APPLICATION_JSON) //
+        .content("{ \"title\": \"Find my coat\", \"completed\": \"true\", \"order\": \"1\" }".getBytes()) //
+        .characterEncoding("utf-8")) //
+        .andExpect(status().isOk()) //
+        .andExpect(jsonPath("$.title", is("Find my coat")))
+        .andExpect(jsonPath("$.completed", is(true)))
+        .andExpect(jsonPath("$.order", is(1)));
   }
 }
