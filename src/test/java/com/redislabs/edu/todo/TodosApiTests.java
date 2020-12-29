@@ -2,6 +2,7 @@ package com.redislabs.edu.todo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.atLeast;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
@@ -77,5 +80,12 @@ public class TodosApiTests {
         .characterEncoding("utf-8")) //
         .andExpect(status().is(HttpStatus.CREATED.value())) //
         .andExpect(jsonPath("$.title", is("Grab your hat")));
+  }
+  
+  @Test
+  public void testDeleteAllTodos() throws Exception {
+    mvc.perform(delete("/todos")).andExpect(status().isOk());
+    
+    verify(todoRepository, atLeast(1)).deleteAll();
   }
 }
