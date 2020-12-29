@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,6 +76,13 @@ public class TodosController {
   @GetMapping("/{id}")
   public Todo get(@PathVariable("id") Long id) {
     return repository.findById(id).get();
+  }
+  
+  @PatchMapping("/{id}")
+  public Todo update(@PathVariable("id") Long id, @RequestBody Todo update) {
+    Todo todo = repository.findById(id).get().updateWith(update);
+
+    return repository.save(todo);
   }
 
 }

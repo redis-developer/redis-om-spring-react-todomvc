@@ -34,4 +34,19 @@ public class Todo {
   @Setter
   private String url;
   
+  public Todo updateWith(Todo update) {
+    if (update.getCompleted() != null) {
+      setCompleted(update.getCompleted());
+    }
+    
+    if (update.getOrder() != null) {
+      setOrder(update.getOrder());
+    }
+    
+    if (update.getTitle() != null) {
+      setTitle(update.getTitle());
+    }
+    
+    return this;
+  }
 }
