@@ -132,4 +132,11 @@ public class TodosApiTests {
         .andExpect(jsonPath("$.completed", is(true)))
         .andExpect(jsonPath("$.order", is(1)));
   }
+  
+  @Test
+  public void testDeleteATodo() throws Exception {
+    mvc.perform(delete("/todos/1967")).andExpect(status().isOk());
+    
+    verify(todoRepository).deleteById(1967L);
+  }
 }
