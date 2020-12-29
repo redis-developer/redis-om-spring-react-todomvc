@@ -6,6 +6,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
 import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -52,9 +55,18 @@ public class TodosController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Todo create(@RequestBody Todo todo) {
-    return repository.save(todo);
+    Todo saved = repository.save(todo);
+    String url = linkTo(methodOn(this.getClass()) //
+        .get(saved.getId())) //
+            .withSelfRel() //
+            .getHref();
+
+    saved.setUrl(url);
+    repository.save(saved);
+
+    return saved;
   }
-  
+
   @DeleteMapping
   public void deleteAll() {
     repository.deleteAll();
