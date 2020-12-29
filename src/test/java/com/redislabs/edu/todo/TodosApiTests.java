@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,5 +88,16 @@ public class TodosApiTests {
     mvc.perform(delete("/todos")).andExpect(status().isOk());
     
     verify(todoRepository, atLeast(1)).deleteAll();
+  }
+  
+  @Test
+  public void testGetATodo() throws Exception {
+    Todo todo = Todo.builder().id(3936L).title("Drink a cup (of tea)").build();
+    
+    given(todoRepository.findById(todo.getId())).willReturn(Optional.of(todo));
+
+    mvc.perform(get(String.format("/todos/%s", todo.getId()))) //
+        .andExpect(status().isOk()) //
+        .andExpect(jsonPath("$.title", is("Drink a cup (of tea)")));
   }
 }
