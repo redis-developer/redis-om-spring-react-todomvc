@@ -100,4 +100,18 @@ public class TodosApiTests {
         .andExpect(status().isOk()) //
         .andExpect(jsonPath("$.title", is("Drink a cup (of tea)")));
   }
+  
+  @Test
+  public void testCreateTodosContainAUrl() throws Exception {
+    Todo todo = Todo.builder().id(8L).title("Find your coat").build();
+
+    given(todoRepository.save(any(Todo.class))).willReturn(todo);
+
+    mvc.perform(post("/todos") //
+        .contentType(MediaType.APPLICATION_JSON) //
+        .content("{ \"title\": \"Grab your hat\" }".getBytes()) //
+        .characterEncoding("utf-8")) //
+        .andExpect(status().is(HttpStatus.CREATED.value())) //
+        .andExpect(jsonPath("$.url", is(String.format("http://localhost/todos/%s", todo.getId()))));
+  }
 }
