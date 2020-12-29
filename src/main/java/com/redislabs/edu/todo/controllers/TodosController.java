@@ -84,5 +84,10 @@ public class TodosController {
 
     return repository.save(todo);
   }
+  
+  @DeleteMapping("/{id}")
+  public void delete(@PathVariable("id") Long id) {
+    repository.deleteById(id);
+  }
 
 }
