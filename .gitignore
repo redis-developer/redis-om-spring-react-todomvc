@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Webpack/NPM/React
+**/node_modules
