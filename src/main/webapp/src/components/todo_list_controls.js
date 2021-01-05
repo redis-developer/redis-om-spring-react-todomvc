@@ -13,7 +13,7 @@ const TodoListControls = function (props) {
   ]);
 
   return (
-    <footer className="footer">
+    <>{todos.length > 0 && <footer className="footer">
       {/*  This should be `0 items left` by default  */}
       <span className="todo-count"><strong>{itemsLeft}</strong> {itemsLeft != 1 ? "items" : "item"} left</span>
       {/*  Remove this if you don't implement routing  */}
@@ -32,7 +32,7 @@ const TodoListControls = function (props) {
       {itemsCompleted > 0 &&
         <button className="clear-completed" onClick={clearCompleted}>Clear completed</button>
       }
-    </footer>
+    </footer>}</>
   );
 }
 
