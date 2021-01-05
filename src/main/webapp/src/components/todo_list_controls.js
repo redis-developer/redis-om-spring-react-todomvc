@@ -1,5 +1,6 @@
 import React, { useMemo, useContext } from 'react';
 import { TodosContext } from "../context/todos_context";
+import { NavLink } from "react-router-dom";
 
 const TodoListControls = function (props) {
   const { todos, clearCompleted } = useContext(TodosContext);
@@ -19,14 +20,14 @@ const TodoListControls = function (props) {
       {/*  Remove this if you don't implement routing  */}
       <ul className="filters">
         <li>
-				  <a className="selected" href="#/">All</a>
-			  </li>
-				<li>
-					<a href="#/active">Active</a>
-				</li>
-				<li>
-					<a href="#/completed">Completed</a>
-				</li>
+          <NavLink to="/" exact={true} activeClassName="selected">All</NavLink>
+        </li>
+        <li>
+          <NavLink to="/active" activeClassName="selected">Active</NavLink>
+        </li>
+        <li>
+          <NavLink to="/completed" activeClassName="selected">Completed</NavLink>
+        </li>
       </ul>
       {/*  Hidden if no completed items are left ↓  */}
       {itemsCompleted > 0 &&
