@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import { TodosContext } from "../context/todos_context";
 import Todo from './todo';
+import TodoListControls from './todo_list_controls';
 
 const TodoList = function () {
   const { todos, toggleAll } = useContext(TodosContext);
@@ -21,6 +22,7 @@ const TodoList = function () {
 				<Todo key={todo.id} id={todo.id} />
         ))}
       </ul>
+      <TodoListControls />
     </section >
   );
 }
