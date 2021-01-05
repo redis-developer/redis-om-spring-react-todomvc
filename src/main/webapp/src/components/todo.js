@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { TodosContext } from "../context/todos_context";
 import { KEY_RETURN, KEY_ESCAPE } from 'keycode-js';
 import useOnClickOutside from "../hooks/use_on_click_outside";
+import { useParams } from "react-router-dom";
 
 const Todo = function (props) {
   const { getTodo, updateTodo, deleteTodo, todos }  = useContext(TodosContext);
@@ -10,6 +11,18 @@ const Todo = function (props) {
   const [title, setTitle] = useState(todo.title);
   const [titleBeforeEditing, setTitleBeforeEditing] = useState("");
   const wrapperRef = useRef(null);
+  const { filter } = useParams();
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    setVisible( //
+      (typeof filter === "undefined") ||
+      (
+        (filter === "active" && !todo.completed) ||
+        (filter === "completed" && todo.completed)
+      )
+    )
+  }, [filter, todo]);
 
   useEffect(() => {
     setTodo(getTodo(props.id));
@@ -53,7 +66,7 @@ const Todo = function (props) {
   }
 
   return (
-    <li
+    <>{visible && <li
       onDoubleClick={() => setEditing(val => !val)}
       className={`${editing ? "editing" : ""}`}
       ref={wrapperRef}
@@ -75,7 +88,7 @@ const Todo = function (props) {
         onChange={changeTitle}
         onKeyDown={handleKeyDown}
         value={title} />
-    </li>
+    </li>}</>
   );
 }
 
