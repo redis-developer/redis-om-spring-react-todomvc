@@ -4,12 +4,16 @@ import { KEY_RETURN, KEY_ESCAPE } from 'keycode-js';
 import useOnClickOutside from "../hooks/use_on_click_outside";
 
 const Todo = function (props) {
-  const { getTodo, updateTodo, deleteTodo }  = useContext(TodosContext);
+  const { getTodo, updateTodo, deleteTodo, todos }  = useContext(TodosContext);
   const [todo, setTodo] = useState(getTodo(props.id));
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
   const [titleBeforeEditing, setTitleBeforeEditing] = useState("");
   const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    setTodo(getTodo(props.id));
+  }, [todos]);
 
   useEffect(() => {
     if (editing) {
