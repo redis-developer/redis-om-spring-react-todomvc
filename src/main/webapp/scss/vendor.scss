@@ -1,0 +1,13 @@
+/**
+ * SCSS and CSS imports for generating vendor.css
+ *
+ * - Any imports here and resolved by `app/src/main/webapp/root/webpack/webpack.vendor.config.js`
+ * - `~` In `@imports` statements means the import is to be resolved by webpack
+ * - The name immediately after `~` could be an alias defined in `app/src/main/webapp/root/webpack/webpack.vendor.config.js`
+ */
+
+// CSS for TodoMVC apps
+@import "~todomvc-common/base";
+@import "~todomvc-app-css/index";
+
+
