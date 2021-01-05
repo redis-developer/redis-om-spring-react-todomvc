@@ -1,12 +1,19 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { TodosContext } from "../context/todos_context";
-import { KEY_RETURN } from 'keycode-js';
+import { KEY_RETURN, KEY_ESCAPE } from 'keycode-js';
 
 const Todo = function (props) {
   const { getTodo, updateTodo, deleteTodo }  = useContext(TodosContext);
   const [todo, setTodo] = useState(getTodo(props.id));
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
+  const [titleBeforeEditing, setTitleBeforeEditing] = useState("");
+
+  useEffect(() => {
+    if (editing) {
+      setTitleBeforeEditing(title);
+    }
+  }, [editing]);
 
   const toggleTodo = () => {
     todo.completed = !todo.completed;
@@ -25,6 +32,11 @@ const Todo = function (props) {
     if (editing && e.which === KEY_RETURN) {
       todo.title = title;
       updateTodo(todo);
+      setEditing(false);
+    }
+
+    if (editing && e.which === KEY_ESCAPE) {
+      setTitle(titleBeforeEditing);
       setEditing(false);
     }
   }
