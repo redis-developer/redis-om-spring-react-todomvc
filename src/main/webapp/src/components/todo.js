@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { TodosContext } from "../context/todos_context";
+import { KEY_RETURN } from 'keycode-js';
 
 const Todo = function (props) {
   const { getTodo, updateTodo, deleteTodo }  = useContext(TodosContext);
   const [todo, setTodo] = useState(getTodo(props.id));
   const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(todo.title);
 
   const toggleTodo = () => {
     todo.completed = !todo.completed;
@@ -13,6 +15,18 @@ const Todo = function (props) {
 
   const removeTodo = () => {
     deleteTodo(props.id);
+  }
+
+  const changeTitle = (e) => {
+    setTitle(e.target.value);
+  }
+
+  const handleKeyDown = (e) => {
+    if (editing && e.which === KEY_RETURN) {
+      todo.title = title;
+      updateTodo(todo);
+      setEditing(false);
+    }
   }
 
   return (
@@ -34,7 +48,9 @@ const Todo = function (props) {
       </div>
       <input
         className="edit"
-        defaultValue={todo.title} />
+        onChange={changeTitle}
+        onKeyDown={handleKeyDown}
+        value={title} />
     </li>
   );
 }
