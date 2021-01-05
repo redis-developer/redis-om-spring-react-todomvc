@@ -4,6 +4,7 @@ import { TodosContext } from "../context/todos_context";
 const Todo = function (props) {
   const { getTodo, updateTodo, deleteTodo }  = useContext(TodosContext);
   const [todo, setTodo] = useState(getTodo(props.id));
+  const [editing, setEditing] = useState(false);
 
   const toggleTodo = () => {
     todo.completed = !todo.completed;
@@ -15,7 +16,10 @@ const Todo = function (props) {
   }
 
   return (
-    <li>
+    <li
+      onDoubleClick={() => setEditing(val => !val)}
+      className={`${editing ? "editing" : ""}`}
+    >
       <div className="view">
         <input
           className="toggle"
