@@ -34,3 +34,6 @@ build/
 
 ### Webpack/NPM/React
 **/node_modules
+
+### Redis RDB
+*.rdb
