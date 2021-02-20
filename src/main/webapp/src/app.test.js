@@ -26,6 +26,10 @@ class TodosPage {
     this.todoItemIsChecked = (idx) => {
       return Selector(`ul.todo-list > li:nth-child(${idx}) input[type=checkbox].toggle:checked`).exists
     }
+
+    this.deleteTodoItemButton = (idx) => {
+      return Selector(`ul.todo-list > li:nth-child(${idx}) > div > button.destroy`)
+    }
   }
 }
 
@@ -120,4 +124,12 @@ test('should allow marking all items as completed', async t => {
 test('should correctly update the complete all checked state', async t => {
   await t
     .expect(page.toggleAllIsChecked.exists).ok();
+});
+
+test('should allow the deletion of an item', async t => {
+  await t
+    .expect(page.itemCount()).eql(3)
+    .hover(page.todoItem(1))
+    .click(page.deleteTodoItemButton(1))
+    .expect(page.itemCount()).eql(2);
 });
