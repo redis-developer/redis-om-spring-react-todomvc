@@ -9,6 +9,7 @@ class TodosPage {
     this.footerInfo = Selector("#react > footer");
     this.toogleAllButton = Selector("label[for=toggle-all]");
     this.clearCompletedButton = Selector("button.clear-completed");
+    this.toggleAllIsChecked = Selector("#toggle-all:checked");
 
     this.itemCount = () => {
       return Selector("ul.todo-list > li").count
@@ -20,6 +21,10 @@ class TodosPage {
 
     this.todoItem = (idx) => {
       return Selector(`ul.todo-list > li:nth-child(${idx})`)
+    }
+
+    this.todoItemIsChecked = (idx) => {
+      return Selector(`ul.todo-list > li:nth-child(${idx}) input[type=checkbox].toggle:checked`).exists
     }
   }
 }
@@ -102,4 +107,17 @@ test('should show all todos in the database', async t => {
     .expect(page.todoItem(1).innerText).contains(TODO_ITEM_THREE)
     .expect(page.todoItem(2).innerText).contains(TODO_ITEM_ONE)
     .expect(page.todoItem(3).innerText).contains(TODO_ITEM_TWO);
+});
+
+test('should allow marking all items as completed', async t => {
+  await t
+    .click(page.toogleAllButton)
+    .expect(page.todoItemIsChecked(1)).ok()
+    .expect(page.todoItemIsChecked(2)).ok()
+    .expect(page.todoItemIsChecked(3)).ok();
+});
+
+test('should correctly update the complete all checked state', async t => {
+  await t
+    .expect(page.toggleAllIsChecked.exists).ok();
 });
