@@ -160,3 +160,13 @@ test('should exit edit mode on a second double click ', async t => {
     .expect(page.todoItemToggle(1).visible).ok()
     .expect(page.todoItemLabel(1).visible).ok();
 });
+
+test('should commit changes edits on return/enter', async t => {
+  await t
+    .doubleClick(page.todoItemLabel(1))
+    .typeText(page.todoItemEdit(1), ' now!')
+    .pressKey('enter')
+    .expect(page.todoItemToggle(1).visible).ok()
+    .expect(page.todoItemLabel(1).visible).ok()
+    .expect(page.todoItem(1).innerText).contains('Wake up now!');
+});
