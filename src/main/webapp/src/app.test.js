@@ -30,6 +30,18 @@ class TodosPage {
     this.deleteTodoItemButton = (idx) => {
       return Selector(`ul.todo-list > li:nth-child(${idx}) > div > button.destroy`)
     }
+
+    this.todoItemToggle = (idx) => {
+      return Selector(`ul.todo-list > li:nth-child(${idx}) input[type=checkbox].toggle`)
+    }
+
+    this.todoItemLabel = (idx) => {
+      return Selector(`ul.todo-list > li:nth-child(${idx}) label`)
+    }
+
+    this.todoItemEdit = (idx) => {
+      return Selector(`ul.todo-list > li:nth-child(${idx}) > input`)
+    }
   }
 }
 
@@ -132,4 +144,19 @@ test('should allow the deletion of an item', async t => {
     .hover(page.todoItem(1))
     .click(page.deleteTodoItemButton(1))
     .expect(page.itemCount()).eql(2);
+});
+
+test('should hide other controls when editing', async t => {
+  await t
+    .doubleClick(page.todoItemLabel(1))
+    .expect(page.todoItemToggle(1).visible).notOk()
+    .expect(page.todoItemLabel(1).visible).notOk();
+});
+
+test('should exit edit mode on a second double click ', async t => {
+  await t
+    .doubleClick(page.todoItemLabel(1))
+    .doubleClick(page.todoItemEdit(1))
+    .expect(page.todoItemToggle(1).visible).ok()
+    .expect(page.todoItemLabel(1).visible).ok();
 });
