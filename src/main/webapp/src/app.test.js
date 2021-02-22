@@ -178,3 +178,11 @@ test('should cancel edits on escape', async t => {
     .pressKey('esc')
     .expect(page.todoItem(2).innerText).contains(TODO_ITEM_TWO);
 });
+
+test('should cancel edits on click outside of edit field', async t => {
+  await t
+    .doubleClick(page.todoItemLabel(2))
+    .typeText(page.todoItemEdit(2), 'foo')
+    .click(page.title)
+    .expect(page.todoItem(2).innerText).contains(TODO_ITEM_TWO);
+});
