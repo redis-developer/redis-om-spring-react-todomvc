@@ -10,6 +10,7 @@ class TodosPage {
     this.toogleAllButton = Selector("label[for=toggle-all]");
     this.clearCompletedButton = Selector("button.clear-completed");
     this.toggleAllIsChecked = Selector("#toggle-all:checked");
+    this.newTodoInput = Selector("input.new-todo");
 
     this.itemCount = () => {
       return Selector("ul.todo-list > li").count
@@ -185,4 +186,35 @@ test('should cancel edits on click outside of edit field', async t => {
     .typeText(page.todoItemEdit(2), 'foo')
     .click(page.title)
     .expect(page.todoItem(2).innerText).contains(TODO_ITEM_TWO);
+});
+
+fixture('New Todo')
+  .before(async t => {
+    const redis = new Redis();
+    const setKey = 'com.redislabs.edu.todo.domain.Todo';
+    const keys = new Set(await redis.smembers(setKey));
+    await redis
+      .pipeline()
+      .del(...keys)
+      .srem(setKey, ...keys)
+      .exec((err, results) => {});
+  })
+  .page(baseUrl);
+
+test('should allow me to add todo items', async t => {
+  await t
+    .typeText(page.newTodoInput, TODO_ITEM_ONE)
+    .pressKey('enter')
+    .typeText(page.newTodoInput, TODO_ITEM_TWO)
+    .pressKey('enter')
+    .expect(page.itemCount()).eql(2)
+    .expect(page.todoItem(1).innerText).contains(TODO_ITEM_ONE)
+    .expect(page.todoItem(2).innerText).contains(TODO_ITEM_TWO);
+});
+
+test('should clear text input field when an item is added', async t => {
+  await t
+    .typeText(page.newTodoInput, TODO_ITEM_THREE)
+    .pressKey('enter')
+    .expect(page.newTodoInput.value).eql('');
 });
