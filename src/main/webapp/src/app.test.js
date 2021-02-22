@@ -170,3 +170,11 @@ test('should commit changes edits on return/enter', async t => {
     .expect(page.todoItemLabel(1).visible).ok()
     .expect(page.todoItem(1).innerText).contains('Wake up now!');
 });
+
+test('should cancel edits on escape', async t => {
+  await t
+    .doubleClick(page.todoItemLabel(2))
+    .typeText(page.todoItemEdit(2), 'foo')
+    .pressKey('esc')
+    .expect(page.todoItem(2).innerText).contains(TODO_ITEM_TWO);
+});
