@@ -11,6 +11,7 @@ class TodosPage {
     this.clearCompletedButton = Selector("button.clear-completed");
     this.toggleAllIsChecked = Selector("#toggle-all:checked");
     this.newTodoInput = Selector("input.new-todo");
+    this.itemsLeftCounter = Selector("#react > section > section > footer > span");
 
     this.itemCount = () => {
       return Selector("ul.todo-list > li").count
@@ -77,13 +78,6 @@ fixture('No Todos')
       await t.click(page.clearCompletedButton);
     }
   });
-
-test('should hide #main and #footer', async t => {
-  await t
-    .expect(page.itemCount()).eql(0)
-    .expect(page.footer.visible).notOk();
-});
-
 
 fixture('Some Todos')
   .page(baseUrl)
@@ -217,4 +211,20 @@ test('should clear text input field when an item is added', async t => {
     .typeText(page.newTodoInput, TODO_ITEM_THREE)
     .pressKey('enter')
     .expect(page.newTodoInput.value).eql('');
+});
+
+fixture('List Controls')
+  .page(baseUrl);
+
+test('should clear items when completed ', async t => {
+  await t
+    .expect(page.itemsLeftCounter.innerText).contains('3 items left')
+    .expect(page.itemCount()).gte(0)
+    .expect(page.clearCompletedButton.exists).notOk()
+    .click(page.toogleAllButton)
+    .expect(page.clearCompletedButton.exists).ok()
+    .click(page.clearCompletedButton)
+    .expect(page.itemCount()).eql(0)
+    .expect(page.clearCompletedButton.exists).notOk()
+    .expect(page.itemsLeftCounter.innerText).contains('0 items left');
 });
