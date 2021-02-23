@@ -12,6 +12,9 @@ class TodosPage {
     this.toggleAllIsChecked = Selector("#toggle-all:checked");
     this.newTodoInput = Selector("input.new-todo");
     this.itemsLeftCounter = Selector("#react > section > section > footer > span");
+    this.allTodosLink = Selector("#todos-all");
+    this.activeTodosLink = Selector("#todos-active");
+    this.completedTodosLink = Selector("#todos-completed");
 
     this.itemCount = () => {
       return Selector("ul.todo-list > li").count
@@ -53,6 +56,9 @@ const page = new TodosPage();
 const TODO_ITEM_ONE = 'Wake up';
 const TODO_ITEM_TWO = 'Fall out of bed';
 const TODO_ITEM_THREE = 'Drag a comb across your head';
+
+const getLocation = ClientFunction(() => window.location.href);
+const goBack = ClientFunction(() => window.history.back());
 
 fixture('The home page').page(baseUrl);
 
@@ -226,4 +232,97 @@ test('should clear items when completed ', async t => {
     .click(page.clearCompletedButton)
     .expect(page.itemCount()).eql(0)
     .expect(page.clearCompletedButton.exists).notOk();
+});
+
+fixture('Routing')
+  .page(baseUrl)
+  .beforeEach(async t => {
+    const itemCount = await page.itemCount();
+    const completedItemCount = await page.completedItemCount();
+    if (itemCount > 0) {
+      if (completedItemCount < itemCount) {
+        await t.click(page.toogleAllButton)
+      }
+      await t.click(page.clearCompletedButton);
+    }
+    await t
+      .typeText(page.newTodoInput, TODO_ITEM_ONE)
+      .pressKey('enter')
+      .typeText(page.newTodoInput, TODO_ITEM_TWO)
+      .pressKey('enter')
+      .typeText(page.newTodoInput, TODO_ITEM_THREE)
+      .pressKey('enter');
+  });
+
+test('should allow me to display active items', async t => {
+  await t
+    .expect(getLocation()).notContains('/active')
+    .click(page.todoItemToggle(2))
+    .click(page.activeTodosLink)
+    .expect(getLocation()).contains('/active')
+    .expect(page.todoItem(1).innerText).contains(TODO_ITEM_ONE)
+    .expect(page.todoItem(2).innerText).contains(TODO_ITEM_THREE);
+});
+
+test('should respect the back button', async t => {
+  await t
+    .click(page.todoItemToggle(2))
+    .click(page.activeTodosLink)
+    .click(page.completedTodosLink)
+    .expect(page.todoItem(1).innerText).contains(TODO_ITEM_TWO); // should show completed items
+
+  await goBack();
+
+  // then active items
+  await t
+    .expect(page.todoItem(1).innerText).contains(TODO_ITEM_ONE)
+    .expect(page.todoItem(2).innerText).contains(TODO_ITEM_THREE);
+
+  await goBack();
+
+  // then all items
+  await t
+    .expect(page.todoItem(1).innerText).contains(TODO_ITEM_ONE)
+    .expect(page.todoItem(2).innerText).contains(TODO_ITEM_TWO)
+    .expect(page.todoItem(3).innerText).contains(TODO_ITEM_THREE);
+});
+
+test('should allow me to display completed items', async t => {
+  await t
+    .expect(getLocation()).notContains('/completed')
+    .click(page.todoItemToggle(2))
+    .click(page.completedTodosLink)
+    .expect(getLocation()).contains('/completed')
+    .expect(page.todoItem(1).innerText).contains(TODO_ITEM_TWO);
+});
+
+test('should allow me to display all items', async t => {
+  await t
+    .click(page.todoItemToggle(2))
+    .click(page.activeTodosLink)
+    .click(page.completedTodosLink)
+    .click(page.allTodosLink)
+    .expect(page.todoItem(1).innerText).contains(TODO_ITEM_ONE)
+    .expect(page.todoItem(2).innerText).contains(TODO_ITEM_TWO)
+    .expect(page.todoItem(3).innerText).contains(TODO_ITEM_THREE);
+});
+
+test('should highlight the currently applied filter', async t => {
+  // initially 'all' should be selected
+  await t
+    .expect(page.allTodosLink.classNames).contains('selected')
+    .expect(page.activeTodosLink.classNames).notContains('selected')
+    .expect(page.completedTodosLink.classNames).notContains('selected');
+
+  await t
+    .click(page.activeTodosLink)
+    .expect(page.allTodosLink.classNames).notContains('selected')
+    .expect(page.activeTodosLink.classNames).contains('selected')
+    .expect(page.completedTodosLink.classNames).notContains('selected');
+
+  await t
+    .click(page.completedTodosLink)
+    .expect(page.allTodosLink.classNames).notContains('selected')
+    .expect(page.activeTodosLink.classNames).notContains('selected')
+    .expect(page.completedTodosLink.classNames).contains('selected');
 });
