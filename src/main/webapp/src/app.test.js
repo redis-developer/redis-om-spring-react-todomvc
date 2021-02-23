@@ -225,6 +225,5 @@ test('should clear items when completed ', async t => {
     .expect(page.clearCompletedButton.exists).ok()
     .click(page.clearCompletedButton)
     .expect(page.itemCount()).eql(0)
-    .expect(page.clearCompletedButton.exists).notOk()
-    .expect(page.itemsLeftCounter.innerText).contains('0 items left');
+    .expect(page.clearCompletedButton.exists).notOk();
 });
