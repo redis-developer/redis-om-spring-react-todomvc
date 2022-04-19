@@ -28,6 +28,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 
+import com.github.f4b6a3.ulid.UlidCreator;
 import com.redislabs.edu.todo.domain.Todo;
 import com.redislabs.edu.todo.repository.TodoRepository;
 
@@ -93,7 +94,7 @@ public class TodosApiTests {
   
   @Test
   public void testGetATodo() throws Exception {
-    Todo todo = Todo.builder().id(3936L).title("Drink a cup (of tea)").build();
+    Todo todo = Todo.builder().id(UlidCreator.getMonotonicUlid().toString()).title("Drink a cup (of tea)").build();
     
     given(todoRepository.findById(todo.getId())).willReturn(Optional.of(todo));
 
@@ -104,7 +105,7 @@ public class TodosApiTests {
   
   @Test
   public void testCreateTodosContainAUrl() throws Exception {
-    Todo todo = Todo.builder().id(8L).title("Find your coat").build();
+    Todo todo = Todo.builder().id(UlidCreator.getMonotonicUlid().toString()).title("Find your coat").build();
 
     given(todoRepository.save(any(Todo.class))).willReturn(todo);
 
@@ -118,7 +119,7 @@ public class TodosApiTests {
   
   @Test
   public void testUpdateATodo() throws Exception {
-    Todo todo = Todo.builder().id(4000L).title("Read a book").build();
+    Todo todo = Todo.builder().id(UlidCreator.getMonotonicUlid().toString()).title("Read a book").build();
 
     given(todoRepository.findById(todo.getId())).willReturn(Optional.of(todo));
     given(todoRepository.save(any(Todo.class))).willReturn(todo);
@@ -137,6 +138,6 @@ public class TodosApiTests {
   public void testDeleteATodo() throws Exception {
     mvc.perform(delete("/todos/1967")).andExpect(status().isOk());
     
-    verify(todoRepository).deleteById(1967L);
+    verify(todoRepository).deleteById("1967");
   }
 }

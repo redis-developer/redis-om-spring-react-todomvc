@@ -44,3 +44,4 @@ build/
 
 ### TestCafe Screenshots
 screenshots/
+/.apt_generated_tests/

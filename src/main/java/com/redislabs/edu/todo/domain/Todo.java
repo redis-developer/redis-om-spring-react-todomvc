@@ -1,7 +1,8 @@
 package com.redislabs.edu.todo.domain;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
+
+import com.redis.om.spring.annotations.Document;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,10 +17,10 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-@RedisHash
+@Document
 public class Todo {
   @Id
-  private Long id;
+  private String id;
 
   @Setter
   private String title;
