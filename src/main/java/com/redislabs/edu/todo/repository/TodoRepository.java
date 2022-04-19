@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.redislabs.edu.todo.domain.Todo;
 
 @Repository
-public interface TodoRepository extends CrudRepository<Todo, Long> {
+public interface TodoRepository extends CrudRepository<Todo, String> {
 }
