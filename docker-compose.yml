@@ -4,9 +4,9 @@ services:
     image: "redislabs/redis-stack:edge"
     ports:
       - "6379:6379"
+      - "8001:8001"
     volumes:
       - ./data:/data
-    entrypoint: redis-server --appendonly yes
     deploy:
       replicas: 1
       restart_policy:
