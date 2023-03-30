@@ -1,22 +1,17 @@
 package com.redislabs.edu.todo;
 
+import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
+import com.redislabs.edu.todo.repository.TodoRepository;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
-import com.redislabs.edu.todo.repository.TodoRepository;
-
 @SpringBootApplication
 @EnableRedisDocumentRepositories
-@EnableSwagger2
 public class TodoApplication {
 
   @Bean
@@ -30,11 +25,15 @@ public class TodoApplication {
   }
 
   @Bean
-  public Docket api() {
-    return new Docket(DocumentationType.SWAGGER_2)
-        .select()
-        .apis(RequestHandlerSelectors.any())
-        .paths(PathSelectors.any())
+  public OpenAPI apiInfo() {
+    return new OpenAPI().info(new Info().title("Redis OM ToDos").version("1.0.0"));
+  }
+
+  @Bean
+  public GroupedOpenApi httpApi() {
+    return GroupedOpenApi.builder()
+        .group("http")
+        .pathsToMatch("/**")
         .build();
   }
 
