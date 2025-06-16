@@ -1,4 +1,4 @@
-package com.redislabs.edu.todo.domain;
+package com.redis.roms.todo.domain;
 
 import org.springframework.data.annotation.Id;
 

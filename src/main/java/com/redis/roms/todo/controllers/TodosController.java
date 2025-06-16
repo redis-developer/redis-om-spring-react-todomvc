@@ -1,4 +1,4 @@
-package com.redislabs.edu.todo.controllers;
+package com.redis.roms.todo.controllers;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.redislabs.edu.todo.domain.Todo;
-import com.redislabs.edu.todo.repository.TodoRepository;
+import com.redis.roms.todo.domain.Todo;
+import com.redis.roms.todo.repository.TodoRepository;
 
 @CrossOrigin( //
     methods = { POST, GET, OPTIONS, DELETE, PATCH }, //

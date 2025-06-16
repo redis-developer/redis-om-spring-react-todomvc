@@ -1,4 +1,4 @@
-package com.redislabs.edu.todo.controllers;
+package com.redis.roms.todo.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

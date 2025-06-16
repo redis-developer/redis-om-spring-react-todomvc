@@ -1,4 +1,4 @@
-package com.redislabs.edu.todo;
+package com.redis.roms.todo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

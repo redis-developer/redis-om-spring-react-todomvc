@@ -1,4 +1,4 @@
-package com.redislabs.edu.todo;
+package com.redis.roms.todo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,8 +29,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 
 import com.github.f4b6a3.ulid.UlidCreator;
-import com.redislabs.edu.todo.domain.Todo;
-import com.redislabs.edu.todo.repository.TodoRepository;
+import com.redis.roms.todo.domain.Todo;
+import com.redis.roms.todo.repository.TodoRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc

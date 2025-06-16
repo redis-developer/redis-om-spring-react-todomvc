@@ -1,7 +1,7 @@
-package com.redislabs.edu.todo;
+package com.redis.roms.todo;
 
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
-import com.redislabs.edu.todo.repository.TodoRepository;
+import com.redis.roms.todo.repository.TodoRepository;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.models.GroupedOpenApi;
